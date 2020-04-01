@@ -125,6 +125,12 @@ export default {
           authority: ['admin', 'user'],
           routes: [
             {
+              name: 'table-list',
+              icon: 'smile',
+              path: '/list/table-list',
+              component: './list/table-list',
+            },
+            {
               path: '/dashboard',
               name: 'dashboard',
               icon: 'dashboard',
@@ -207,12 +213,6 @@ export default {
                       component: './list/search/applications',
                     },
                   ],
-                },
-                {
-                  name: 'table-list',
-                  icon: 'smile',
-                  path: '/list/table-list',
-                  component: './list/table-list',
                 },
                 {
                   name: 'basic-list',

@@ -6,6 +6,7 @@ import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import CreateForm from './components/CreateForm';
 import InviteForm from './components/InviteForm';
 import UpdateForm, { FormValueType } from './components/UpdateForm';
+import UpdateNotesForm from './components/UpdateNotesForm';
 import { TableListItem } from './data.d';
 import { queryRule, updateRule, addRule, removeRule } from './service';
 
@@ -34,6 +35,7 @@ const handleAdd = async (fields: FormValueType) => {
  * @param fields
  */
 const handleUpdate = async (fields: FormValueType) => {
+  console.log(fields);
   const hide = message.loading('正在配置');
   try {
     await updateRule({
@@ -81,19 +83,24 @@ const TableList: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<TableListItem>[] = [
     {
+      title: 'ID',
+      dataIndex: 'key',
+      renderText: (val: string) => `HSF-${val}`,
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
     },
     {
-      title: 'Description',
+      title: 'Notes',
       dataIndex: 'desc',
     },
-    {
-      title: 'No',
-      dataIndex: 'callNo',
-      sorter: true,
-      renderText: (val: string) => `${val} 万`,
-    },
+    // {
+    //   title: 'No',
+    //   dataIndex: 'callNo',
+    //   sorter: true,
+    //   renderText: (val: string) => `${val} 万`,
+    // },
     // {
     //   title: 'Status',
     //   dataIndex: 'status',
@@ -159,7 +166,7 @@ const TableList: React.FC<{}> = () => {
         rowKey="key"
         toolBarRender={(action, { selectedRows }) => [
           <Button icon={<PlusOutlined />} type="primary" onClick={() => handleModalVisible(true)}>
-            新建
+            New
           </Button>,
           selectedRows && selectedRows.length > 0 && (
             <Button
@@ -195,12 +202,13 @@ const TableList: React.FC<{}> = () => {
         ]}
         tableAlertRender={(selectedRowKeys, selectedRows) => (
           <div>
-            已选择 <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> 项&nbsp;&nbsp;
-            <span>
+            Selected <a style={{ fontWeight: 600 }}>{selectedRowKeys.length}</a> users&nbsp;&nbsp;
+            {/* <span>
               服务调用次数总计 {selectedRows.reduce((pre, item) => pre + item.callNo, 0)} 万
-            </span>
+            </span> */}
           </div>
         )}
+        search={{ searchText: 'Search', resetText: 'Reset' }}
         request={params => queryRule(params)}
         columns={columns}
         rowSelection={{}}
@@ -235,7 +243,8 @@ const TableList: React.FC<{}> = () => {
       />
 
       {stepFormValues && Object.keys(stepFormValues).length ? (
-        <UpdateForm
+        // <UpdateForm
+        <UpdateNotesForm
           onSubmit={async value => {
             const success = await handleUpdate(value);
             if (success) {

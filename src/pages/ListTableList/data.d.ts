@@ -11,6 +11,8 @@ export interface TableListItem {
   updatedAt: Date;
   createdAt: Date;
   progress: number;
+  role: number;
+  isAlumni: number;
 }
 
 export interface TableListPagination {
@@ -32,4 +34,6 @@ export interface TableListParams {
   key?: number;
   pageSize?: number;
   currentPage?: number;
+  role?: number;
+  isAlumni?: number;
 }

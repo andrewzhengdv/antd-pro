@@ -2,7 +2,6 @@ import request from '@/utils/request';
 import { TableListParams } from './data.d';
 
 export async function queryRule(params?: TableListParams) {
-  console.log('ss');
   return request('/api/rule', {
     params,
   });

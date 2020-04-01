@@ -39,7 +39,6 @@ function getRule(req: Request, res: Response, u: string) {
   const params = (parse(url, true).query as unknown) as TableListParams;
 
   let dataSource = tableListDataSource;
-  console.log(dataSource);
 
   if (params.sorter) {
     const s = params.sorter.split('_');

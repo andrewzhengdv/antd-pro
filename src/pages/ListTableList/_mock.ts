@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Request, Response } from 'express';
 import { parse } from 'url';
+import mockjs from 'mockjs';
 import { TableListItem, TableListParams } from './data.d';
 
 // mock tableListDataSource
@@ -17,9 +18,10 @@ const genList = (current: number, pageSize: number) => {
         'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
         'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
       ][i % 2],
-      name: `TradeCode ${index}`,
+      // name: `TradeCode ${index}`,
+      name: mockjs.Random.name(),
       owner: '曲丽丽',
-      desc: 'dddd',
+      desc: '',
       callNo: Math.floor(Math.random() * 1000),
       role: Math.floor(Math.random() * 10) % 4,
       status: Math.floor(Math.random() * 10) % 4,
@@ -43,6 +45,8 @@ function getRule(req: Request, res: Response, u: string) {
   }
   const { current = 1, pageSize = 10 } = req.query;
   const params = (parse(url, true).query as unknown) as TableListParams;
+
+  console.log('GT', params);
 
   let dataSource = [...tableListDataSource].slice((current - 1) * pageSize, current * pageSize);
   if (params.sorter) {
@@ -74,6 +78,19 @@ function getRule(req: Request, res: Response, u: string) {
   if (params.name) {
     dataSource = dataSource.filter(data => data.name.includes(params.name || ''));
   }
+
+  if (params.role) {
+    dataSource = dataSource.filter(data => data.role === Number(params.role));
+  }
+
+  if (params.isAlumni) {
+    dataSource = dataSource.filter(data => data.isAlumni === Number(params.isAlumni));
+  }
+
+  if (params.desc) {
+    dataSource = dataSource.filter(data => data.desc.includes(params.desc || ''));
+  }
+
   const result = {
     data: dataSource,
     total: tableListDataSource.length,
@@ -94,6 +111,8 @@ function postRule(req: Request, res: Response, u: string, b: Request) {
 
   const body = (b && b.body) || req.body;
   const { method, name, desc, key } = body;
+
+  console.log(method, desc, key);
 
   switch (method) {
     /* eslint no-case-declarations:0 */
